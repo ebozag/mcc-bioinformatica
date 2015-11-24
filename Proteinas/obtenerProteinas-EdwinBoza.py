@@ -128,7 +128,7 @@ def main(argv):
                 ### obtiene el ARN como complementario de la cadena ADN
                 ### y a partir de ahí las proteínas, pero en el ejemplo dado en
                 ### clase, solo se tradujo la Timina por Uracilo
-                
+                """
                 ### Para obtener la transcripción en RNA (ARN) se intercambian
                 ### los caracteres 'A -> U', 'T -> A', 'C -> G' y 'G -> C' 
                 for char in line.rstrip():
@@ -148,7 +148,6 @@ def main(argv):
                     if char == 'T':
                         char = 'U'
                     mRNA = mRNA + char
-		"""
     print obtenerProteinas(mRNA)
     return;
     
