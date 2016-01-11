@@ -103,7 +103,7 @@ def obtenerORF(mRNA, flagEucariota, flagReversed):
     else:
         marcos = range(1)
     '''
-    marcos = range(3)
+    marcos = range(1)
 
     proteinas = ''
     for marco in marcos:   ### Se repite el proceso por cada marco.
@@ -153,6 +153,7 @@ def main(argv):
 
     ### Setear flagEcuariota = 0, significa que es Procariota.
     flagEucariota = 1
+    char2 = ""
     
     ### Primera Parte: Leer la secuencia del archivo y obtener la transcripcion
     ### RNA. Almacenarla en memoria en un script largo.
@@ -194,6 +195,7 @@ def main(argv):
                     
                     ### Obtengo los ORF de la cadena original y de la cadena 
                     ### Complementaria reversa.
+    ##print mRNA
     print obtenerORF(mRNA, flagEucariota, 0)
     print obtenerORF(mRNA_complementary_reversed, flagEucariota, 1)
     return;
