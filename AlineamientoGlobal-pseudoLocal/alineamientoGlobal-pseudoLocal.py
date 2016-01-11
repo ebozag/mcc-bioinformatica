@@ -61,8 +61,18 @@ def main(argv):
 
 
     ### Obtengo las secuencias de los 2 archivos
-    etiquetaSecuencia1, secuencia1 = leerSecuenciaArchivo(archivoSecuencia1)
-    etiquetaSecuencia2, secuencia2 = leerSecuenciaArchivo(archivoSecuencia2)
+    etiquetaSecuencia1, secuencia1_original = leerSecuenciaArchivo(archivoSecuencia1)
+    etiquetaSecuencia2, secuencia2_original = leerSecuenciaArchivo(archivoSecuencia2)
+
+    ### Recorte de la parte inicial de la secuencia más larga
+    if len(secuencia1_original) >= len(secuencia2_original):
+        offset = secuencia1_original.index(secuencia2_original[0])
+        secuencia1 = secuencia1_original[offset:]
+        secuencia2 = secuencia2_original
+    else:
+        offset = secuencia2_original.index(secuencia1_original[0])
+        secuencia1 = secuencia1_original
+        secuencia2 = secuencia2_original[offset:]
 
     ### Calculo las dimensiones de las secuencias, se usa como dimensiones de los arreglos
     m = len(secuencia1)
