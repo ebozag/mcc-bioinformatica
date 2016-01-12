@@ -157,11 +157,18 @@ def main(argv):
             relacionador = " " + relacionador
             j -= 1
 
+
+    ### Cálculo del porcentaje de cobertura
+    if len(secuencia1_original) >= len(secuencia2_original):
+        cobertura = float(len(secuenciaAlineada2)) / float(len(secuencia2_original)) * 100
+    else:
+        cobertura = float(len(secuenciaAlineada1)) / float(len(secuencia1_original)) * 100
+      
     ### Imprimo resultados
     print "#################################################"
     print "### RESULTADOS DE ALINEAMIENTO DE LAS SECUENCIAS:"
-    print secuencia1
-    print secuencia2
+    print secuencia1_original
+    print secuencia2_original
     print
     print "Score: " + str(maxScore)
     print
@@ -169,7 +176,8 @@ def main(argv):
     print secuenciaAlineada1
     print relacionador
     print secuenciaAlineada2
-    
+    print
+    print "### Porcentaje de cobertura: " + str(cobertura) + "%."
  
 if __name__ == "__main__":
    main(sys.argv[1:])
