@@ -205,20 +205,29 @@ def main(argv):
 
     ### Cálculo del porcentaje de identidad
     identidad = float(relacionador.count("|")) / float(len(relacionador)) * 100
+
+    ### Cálculo del número de gaps
+    if len(secuencia1_original) >= len(secuencia2_original):
+        gaps = secuenciaAlineada2.count('-')
+    else:
+        gaps = secuenciaAlineada1.count('-')
       
     ### Imprimo resultados
     print "#################################################"
-    print "### RESULTADOS DE ALINEAMIENTO DE LAS SECUENCIAS:"
+    print "### RESULTADOS DE ALINEAMIENTO DE SECUENCIAS:"
+    print
+    print "### Secuencias originales:"
     print secuencia1_original
     print secuencia2_original
-    print
-    print "Score: " + str(maxScore)
     print
     print "### Secuencias alineadas:"
     print secuenciaAlineada1
     print relacionador
     print secuenciaAlineada2
     print
+    print "### Valores calculados:"
+    print "### Score: " + str(maxScore)
+    print "### Gaps en secuencia menor: " + str(gaps)
     print "### Porcentaje de identidad: " + str(identidad) + "%."
  
 if __name__ == "__main__":
