@@ -8,6 +8,44 @@ Created on Sun Jan  10 2016
 import sys, getopt, os
 import numpy as np
 
+### Función para verificar si 2 caracteres son "iguales", incluyendo los caracteres
+### ambiguos. Devuelve booleano.
+def sonIguales(a, b):
+    if (a.lower() == 'a') and (b.lower() in ['a', 'w', 'm', 'r', 'd', 'h', 'v', 'n', '-']):
+        return True
+    elif (a.lower() == 'c') and (b.lower() in ['c', 's', 'm', 'y', 'b', 'h', 'v', 'n', '-']):
+        return True
+    elif (a.lower() == 'g') and (b.lower() in ['g', 's', 'k', 'r', 'b', 'd', 'v', 'n', '-']):
+        return True
+    elif (a.lower() == 't') and (b.lower() in ['t', 'w', 'k', 'y', 'b', 'd', 'h', 'n', '-']):
+        return True
+    elif (a.lower() == 'u') and (b.lower() in ['u', 'w', 'k', 'y', 'b', 'd', 'h', 'n', '-']):
+        return True
+    elif (a.lower() == 'w') and (b.lower() in ['w', 'a', 't', 'n', '-']):
+        return True
+    elif (a.lower() == 's') and (b.lower() in ['s', 'c', 'g', 'n', '-']):
+        return True
+    elif (a.lower() == 'm') and (b.lower() in ['m', 'a', 'c', 'n', '-']):
+        return True
+    elif (a.lower() == 'k') and (b.lower() in ['k', 'g', 't', 'n', '-']):
+        return True
+    elif (a.lower() == 'r') and (b.lower() in ['r', 'a', 'g', 'n', '-']):
+        return True
+    elif (a.lower() == 'y') and (b.lower() in ['y', 'c', 't', 'n', '-']):
+        return True
+    elif (a.lower() == 'b') and (b.lower() in ['b', 'c', 'g', 't', 'n', '-']):
+        return True
+    elif (a.lower() == 'd') and (b.lower() in ['d', 'a', 'g', 't', 'n', '-']):
+        return True
+    elif (a.lower() == 'h') and (b.lower() in ['h', 'a', 'c', 't', 'n', '-']):
+        return True
+    elif (a.lower() == 'v') and (b.lower() in ['v', 'a', 'c', 'g', 'n', '-']):
+        return True
+    elif (a.lower() in ['n', '-']) and (b.lower() in ['a', 'c', 'g', 't', 'u', 'w', 's', 'm', 'k', 'r', 'y', 'b', 'd', 'h', 'v', 'n', '-']):
+        return True
+    else:
+        return False
+
 
 def leerSecuenciaArchivo(nombreArchivo):
     ### Se asume formato FASTA y una sola secuencia por cada archivo.
@@ -105,7 +143,8 @@ def main(argv):
     ### Proceso principal de comparación de las cadenas y asignación de puntajes
     for i in range(1,m+1):
         for j in range(1,n+1):
-            if secuencia1[i-1] == secuencia2[j-1]:
+            ###if secuencia1[i-1] == secuencia2[j-1]:
+            if sonIguales(secuencia1[i-1], secuencia2[j-1]):
                 score[i,j] = score[i-1,j-1] + premioMatch
                 path[i,j] = 1
             else:
@@ -124,11 +163,16 @@ def main(argv):
                     path[i,j] = 2
                 
             ### Verifico si el nuevo puntaje es el mayor y reemplazo la variable.
-            if  score[i,j] >= maxScore:
-                maxScore = score[i,j]
-                maxScore_i = i
-                maxScore_j = j
-    
+            if (len(secuencia1_original) >= len(secuencia2_original) and j == n) \
+                or (len(secuencia2_original) >= len(secuencia1_original) and i == m ):
+                if  score[i,j] >= maxScore:
+                    maxScore = score[i,j]
+                    maxScore_i = i
+                    maxScore_j = j
+    ### Debug
+    #print score
+    #print maxScore
+        
     ### Construcción de Cadenas alineadas
     ### Reconstruir la ruta
     i = maxScore_i
@@ -140,7 +184,8 @@ def main(argv):
         if path[i][j] == 1:
             secuenciaAlineada1 = secuencia1[i-1] + secuenciaAlineada1
             secuenciaAlineada2 = secuencia2[j-1] + secuenciaAlineada2
-            if secuencia1[i-1] == secuencia2[j-1]:
+            ###if secuencia1[i-1] == secuencia2[j-1]:
+            if sonIguales(secuencia1[i-1], secuencia2[j-1]):
                 relacionador = "|" + relacionador
             else:
                 relacionador = " " + relacionador
@@ -158,11 +203,8 @@ def main(argv):
             j -= 1
 
 
-    ### Cálculo del porcentaje de cobertura
-    if len(secuencia1_original) >= len(secuencia2_original):
-        cobertura = float(len(secuenciaAlineada2)) / float(len(secuencia2_original)) * 100
-    else:
-        cobertura = float(len(secuenciaAlineada1)) / float(len(secuencia1_original)) * 100
+    ### Cálculo del porcentaje de identidad
+    identidad = float(relacionador.count("|")) / float(len(relacionador)) * 100
       
     ### Imprimo resultados
     print "#################################################"
@@ -177,7 +219,7 @@ def main(argv):
     print relacionador
     print secuenciaAlineada2
     print
-    print "### Porcentaje de cobertura: " + str(cobertura) + "%."
+    print "### Porcentaje de identidad: " + str(identidad) + "%."
  
 if __name__ == "__main__":
    main(sys.argv[1:])
